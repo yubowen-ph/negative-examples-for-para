@@ -27,7 +27,7 @@ if os.path.exists(tfidf_vec_path):
 else:  
     tfidf_vec =  get_tfidf_feature(raw_para_sentences, remarks)  
     with open(tfidf_vec_path,'wb') as f:
-        pickle.dump(tfidf_vec_path, f)
+        pickle.dump(tfidf_vec, f)
 
 
 if os.path.exists(lshf_path):
