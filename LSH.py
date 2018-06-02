@@ -3,6 +3,7 @@ from utils import *
 import os
 from config import Config
 import time
+import numpy
 
 
 remarks = '100k'
