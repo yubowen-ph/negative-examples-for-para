@@ -38,7 +38,7 @@ else:
         pickle.dump(lshf, f, protocol=4) 
 
   
-orig_tfidf_vecs = [tfidf_vec[i] for i in range(0, len(tfidf_vec), 2)]
+orig_tfidf_vecs = [tfidf_vec[i] for i in range(tfidf_vec.shape[0], 2)]
 
 
 t1 =  time.time()
