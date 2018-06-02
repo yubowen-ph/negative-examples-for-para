@@ -3,7 +3,7 @@ from utils import *
 import os
 from config import Config
 import time
-import numpy
+import numpy as np
 
 
 remarks = '100k'
@@ -44,7 +44,7 @@ orig_tfidf_vecs = [tfidf_vec[i] for i in range(tfidf_vec.shape[0], 2)]
 
 t1 =  time.time()
 x_test = tfidf_vec[0] 
-distances, indices = lshf.kneighbors(orig_tfidf_vecs.toarray(), n_neighbors = 3)  
+distances, indices = lshf.kneighbors(np.array(orig_tfidf_vecs), n_neighbors = 3)  
 
 
 with open(indices_path,'wb') as f:
