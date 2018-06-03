@@ -17,6 +17,7 @@ else:
     assert len(raw_para_sentences) == 2*len(indices),'indices与raw_para_sentences不匹配'
     sentence_pairs = []
     for i in range(len(indices)):
+        print(i)
         kneighbors = indices[i]
         orig_index = 2*i
         para_index = 2*i+1
