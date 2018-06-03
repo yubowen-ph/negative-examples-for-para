@@ -2,7 +2,7 @@ import numpy as np
 from config import Config
 import os
 import pickle
-
+import json
 
 remarks = '100k'
 sentences_path = Config.cache_dir + "/sentences_%s.pkl"%remarks
