@@ -1,5 +1,9 @@
 import numpy as np
 from config import Config
+import os
+import pickle
+
+
 remarks = '100k'
 sentences_path = Config.cache_dir + "/sentences_%s.pkl"%remarks
 indices_path = Config.data_dir + "/indices_%s.pkl"%remarks
