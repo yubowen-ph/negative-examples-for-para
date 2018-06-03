@@ -19,7 +19,7 @@ warnings.filterwarnings('ignore')
 label2int = {"POSITIVE":1,"NEGATIVE":0}
 int2label = {1:"POSITIVE",0:"NEGATIVE"}
 
-PATH_Mac = "/Users/yubowen/数据/代码/复述"
+PATH_Mac = "/Users/yubowen/数据/代码/experiments/neg-para"
 PATH_Ubuntu = '/home/yubowen/neg-para'
 
 def isMacSystem():

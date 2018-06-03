@@ -4,6 +4,8 @@ from random import randint
 from random import choice
 from random import shuffle
 from config import Config
+from gensim import corpora
+from gensim.similarities import Similarity
 import os
 from sklearn.feature_extraction.text import TfidfVectorizer 
 import string
@@ -40,3 +42,22 @@ def get_tfidf_feature(contents, remarks=""):
     pickle.dump(result, open(result_path,"wb"))
     pickle.dump(tfidf_vec, open(tfidf_vec_path,"wb"))
     return result
+
+
+def get_docsim_feature(contents, remarks=""):
+    
+    dictionary_path = Config.cache_dir + "/docsim/dic_%s.pkl"%remarks
+    corpus_path = Config.cache_dir + "/docsim/corpus_%s.pkl"%remarks
+    corpora_documents = []  
+    tokenizer = Tokenizer()
+    for item_text in contents:  
+        item_str = tokenizer(item_text)  
+        corpora_documents.append(item_str) 
+    dictionary = corpora.Dictionary(corpora_documents)  
+    corpus = [dictionary.doc2bow(text) for text in corpora_documents]  
+    similarity = Similarity('-Similarity-index', corpus, num_features=300)  
+    similarity.num_best = 3
+    pickle.dump(dictionary, open(dictionary_path,"wb"), protocol=4)
+    pickle.dump(corpus, open(corpus_path,"wb"), protocol=4)
+
+    return similarity, corpus 
