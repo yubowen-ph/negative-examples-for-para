@@ -19,7 +19,7 @@ if __name__ == "__main__":
                         help='num iterations (default: 25000)')
     parser.add_argument('--batch-size', type=int, default=45, metavar='BS',
                         help='batch size (default: 45)')
-    parser.add_argument('--use-cuda', type=bool, default=False, metavar='CUDA',
+    parser.add_argument('--use-cuda', type=bool, default=True, metavar='CUDA',
                         help='use cuda (default: True)')
     parser.add_argument('--learning-rate', type=float, default=0.0005, metavar='LR',
                         help='learning rate (default: 0.0005)')
