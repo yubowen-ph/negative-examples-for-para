@@ -118,7 +118,9 @@ def main(args):
         vocab = json.load(open(os.path.join(args.save, 'vocab.json'), 'r'))
         unk_idx = vocab['<oov>']
         indices1 = [vocab[w] if w in vocab else unk_idx for w in words1]
+        indices1 = torch.LongTensor(np.array(indices1))
         indices2 = [vocab[w] if w in vocab else unk_idx for w in words2]
+        indices2 = torch.LongTensor(np.array(indices2))
         hidden1 = autoencoder.encode(indices = indices1, lengths = args.maxlen, noise = None)
         hidden2 = autoencoder.encode(indices = indices2, lengths = args.maxlen, noise = None)
         print("\nOriginal Sentence1:\n")
