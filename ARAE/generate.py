@@ -128,7 +128,7 @@ def main(args):
 
     if args.nsampleinterpolations > 0:
         sentence1 = 'She said other bodies had already been buried due to advanced decomposition .'
-        sentence2 = 'She said other bodies had already been <oov> due to advanced <oov> .'
+        sentence2 = 'She said other bodies had already been due to advanced .'
         words1 = sentence1.lower().strip().split(" ")
         words2 = sentence2.lower().strip().split(" ")
         words1 = ['<sos>'] + words1 + ['<eos>']
