@@ -242,6 +242,8 @@ class Seq2Seq(nn.Module):
         self.start_symbols.data.fill_(1)
 
         embedding = self.embedding_decoder(self.start_symbols)
+        print(embedding.shape)
+        print(hidden.unsqueeze(1).shape)
         inputs = torch.cat([embedding, hidden.unsqueeze(1)], 2)
 
         # unroll
