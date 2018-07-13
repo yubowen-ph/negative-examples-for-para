@@ -136,7 +136,7 @@ def main(args):
         for L in lambdas:
             hidden.append(((1-L)*hidden1 + L*hidden2).unsqueeze(0))
         hidden.append(hidden2.unsqueeze(0))
-        hidden = torch.cat(hidden，0)
+        hidden = torch.cat(hidden,0)
         generated_sentence = generate_from_hidden(hidden = hidden, autoencoder = autoencoder, maxlen = args.maxlen)
         for sent in generated_sentence:
             print(sent)
