@@ -117,12 +117,12 @@ def main(args):
         words2 = ['<sos>'] + words2 + ['<eos>']
         vocab = json.load(open(os.path.join(args.save, 'vocab.json'), 'r'))
         unk_idx = vocab['<oov>']
-        indices1 = [vocab[w] if w in vocab else unk_idx for w in words1]
+        indices1 = [[vocab[w] if w in vocab else unk_idx for w in words1]]
         indices1 = Variable(torch.LongTensor(np.array(indices1)).cuda())
-        indices2 = [vocab[w] if w in vocab else unk_idx for w in words2]
+        indices2 = [[vocab[w] if w in vocab else unk_idx for w in words2]]
         indices2 = Variable(torch.LongTensor(np.array(indices2)).cuda())
-        hidden1 = autoencoder.encode(indices = indices1, lengths = args.maxlen, noise = None)
-        hidden2 = autoencoder.encode(indices = indices2, lengths = args.maxlen, noise = None)
+        hidden1 = autoencoder.encode(indices = indices1, lengths = [len(words1)-1], noise = None)
+        hidden2 = autoencoder.encode(indices = indices2, lengths = [len(words2)-1], noise = None)
         print("\nOriginal Sentence1:\n")
         print(sentence1)
         print("\nOriginal Sentence2:\n")
