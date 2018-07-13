@@ -136,7 +136,7 @@ def main(args):
         for L in lambdas:
             hidden.append((1-L)*hidden1 + L*hidden2)
         hidden.append(hidden2)
-        hidden = torch.Tensor(hidden)
+        hidden = Variable(torch.FloatTensor(hidden).cuda())
         generated_sentence = generate_from_hidden(hidden = hidden, autoencoder = autoencoder, maxlen = args.maxlen)
         for sent in generated_sentence:
             print(sent)
