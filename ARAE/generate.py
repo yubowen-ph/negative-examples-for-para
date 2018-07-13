@@ -118,9 +118,9 @@ def main(args):
         vocab = json.load(open(os.path.join(args.save, 'vocab.json'), 'r'))
         unk_idx = vocab['<oov>']
         indices1 = [vocab[w] if w in vocab else unk_idx for w in words1]
-        indices1 = torch.LongTensor(np.array(indices1)).cuda()
+        indices1 = Variable(torch.LongTensor(np.array(indices1)).cuda())
         indices2 = [vocab[w] if w in vocab else unk_idx for w in words2]
-        indices2 = torch.LongTensor(np.array(indices2)).cuda()
+        indices2 = Variable(torch.LongTensor(np.array(indices2)).cuda())
         hidden1 = autoencoder.encode(indices = indices1, lengths = args.maxlen, noise = None)
         hidden2 = autoencoder.encode(indices = indices2, lengths = args.maxlen, noise = None)
         print("\nOriginal Sentence1:\n")
@@ -136,7 +136,7 @@ def main(args):
         for L in lambdas:
             hidden.append((1-L)*hidden1 + L*hidden2)
         hidden.append(hidden2)
-        hidden = Variable(hidden)
+        hidden = torch.Tensor(hidden)
         generated_sentence = generate_from_hidden(hidden = hidden, autoencoder = autoencoder, maxlen = args.maxlen)
         for sent in generated_sentence:
             print(sent)
