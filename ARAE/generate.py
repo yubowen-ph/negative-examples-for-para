@@ -154,7 +154,8 @@ def main(args):
         for L in lambdas:
             hidden.append(((1-L)*hidden1 + L*hidden2).unsqueeze(0))
         hidden.append(hidden2.unsqueeze(0))
-        hidden = torch.cat(hidden,0)
+        hidden = torch.cat(hidden,0).squeeze(1)
+        print(hidden.shape)
         generated_sentence = generate_from_hidden(hidden_state = hidden, autoencoder = autoencoder, maxlen = args.maxlen, vocab=vocab, sample=args.sample)
         for sent in generated_sentence:
             print(sent)
