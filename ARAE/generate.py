@@ -127,8 +127,8 @@ def main(args):
                 f.write(sent+"\n")
 
     if args.nsampleinterpolations > 0:
-        sentence1 = 'She said other bodies had already been buried due to advanced decomposition .'
-        sentence2 = 'She said other bodies had already been due to advanced .'
+        sentence1 = 'The military said government soldiers were killed in the fighting'
+        sentence2 = 'The military said government soldiers were killed'
         words1 = sentence1.lower().strip().split(" ")
         words2 = sentence2.lower().strip().split(" ")
         words1 = ['<sos>'] + words1 + ['<eos>']
