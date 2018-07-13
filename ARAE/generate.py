@@ -129,14 +129,14 @@ def main(args):
         print(sentence2)
         print("\nGenerated interpolation sentences:\n")
 
-        hidden = [hidden1]
+        hidden = [hidden1.unsqueeze(0)]
 
         lambdas = [x*1.0/(args.steps-1) for x in range(args.steps)]
 
         for L in lambdas:
-            hidden.append((1-L)*hidden1 + L*hidden2)
-        hidden.append(hidden2)
-        hidden = Variable(torch.FloatTensor(hidden).cuda())
+            hidden.append(((1-L)*hidden1 + L*hidden2).unsqueeze(0))
+        hidden.append(hidden2.unsqueeze(0))
+        hidden = torch.cat(hidden，0)
         generated_sentence = generate_from_hidden(hidden = hidden, autoencoder = autoencoder, maxlen = args.maxlen)
         for sent in generated_sentence:
             print(sent)
