@@ -316,9 +316,10 @@ def generate_from_hidden(hidden_state, autoencoder, vocab, sample, maxlen):
 
     max_indices = max_indices.data.cpu().numpy()
     sentences = []
+    idx2word = {v: k for k, v in vocab.items()}
     for idx in max_indices:
         # generated sentence
-        words = [vocab[x] for x in idx]
+        words = [idx2word[x] for x in idx]
         # truncate sentences to first occurrence of <eos>
         truncated_sent = []
         for w in words:
