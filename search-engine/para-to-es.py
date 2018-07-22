@@ -35,8 +35,8 @@ def get_para_5m_raw_data():
     for i in lines:
         s1 = i.split("\t")[0].lower()
         s2 = i.split("\t")[1].lower()
-        examples.append(s1)
-        examples.append(s2)
+        examples.append({'content':s1, 'type':'origin'})
+        examples.append({'content':s2, 'type':'para'})
     return examples
 
 
