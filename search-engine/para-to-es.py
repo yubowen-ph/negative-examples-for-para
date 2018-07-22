@@ -49,11 +49,11 @@ def document(sentences):
 
 
 if __name__ == '__main__':
-    init_log()
+    # init_log()
     sentences = get_para_5m_raw_data()
-    for chunk in bulk_chunks(document(sentences), docs_per_chunk=10000,
+    for chunk in bulk_chunks(document(sentences), docs_per_chunk=1000,
         bytes_per_chunk=100000):
         es.bulk(chunk, doc_type='sentence', index='para-nmt-50m')
-        doc_num += 10000
+        doc_num += 1000
         print("indexed"+str(doc_num)+"docs")
         logging.info("indexed"+str(doc_num)+"docs")
