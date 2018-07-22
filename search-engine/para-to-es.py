@@ -43,7 +43,7 @@ def get_para_5m_raw_data():
 def document(sentences):
     for s in sentences:
         dic = {'content': s['content'], 
-                            'type': page['type']
+                            'type': s['type']
                             }
         yield es.index_op(dic)
 
