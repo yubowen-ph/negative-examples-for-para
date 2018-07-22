@@ -1,14 +1,15 @@
 
 import pickle
-from elasticsearch import ElasticSearch
+from elasticsearch import Elasticsearch
 from pyelasticsearch import bulk_chunks
 import platform
 import logging
 import time
 import os
+import io
 from logging.handlers import RotatingFileHandler
-PATH_Ubuntu = '/MoveDisk/sogout_data.0/'
-es = ElasticSearch('http://192.168.124.87:9200/')
+PATH = '/home/yubowen/experiments/neg-para/search-engine/para-nmt-5m-processed.txt'
+es = Elasticsearch('http://192.168.124.87:9200/')
 
 
 
