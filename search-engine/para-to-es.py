@@ -9,7 +9,7 @@ import os
 import io
 from logging.handlers import RotatingFileHandler
 PATH = '/home/yubowen/experiments/neg-para/search-engine/para-nmt-5m-processed.txt'
-es = ElasticSearch('http://192.168.124.87:9200/', http_auth=(user,pass))
+es = ElasticSearch('http://192.168.124.87:9200/')
 
 
 
