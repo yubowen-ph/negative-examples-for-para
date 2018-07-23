@@ -65,7 +65,7 @@ if __name__ == '__main__':
     import sys
     es_client = Elasticsearch('http://192.168.124.87:9200/')
     query = "that's his dead son 's birthday"
-    final_results = search(es_client = es_client, query_term= query, field = 'content',phrase_match = True,num = 10)
+    final_results = search(es_client = es_client, query_term= query, field = 'content',phrase_match = False,num = 10)
     for i in final_results:
         print(i)
     print(len(final_results))
