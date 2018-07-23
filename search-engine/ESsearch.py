@@ -1,6 +1,9 @@
 from elasticsearch import helpers
 
+PATH = '/home/yubowen/experiments/neg-para/search-engine/para-nmt-5m-processed.txt'
+sentence_pairs_path = 'sentence_pairs.json'
 
+unpaired_sentences_path = 'unpaired_sentences.json'
 
 
 
@@ -10,7 +13,14 @@ def search(es_client, query_term, field = 'content',phrase_match = False,num = 3
     final_result = get_result_list(es_result,num = num)
     return final_result
 
-
+def get_para_5m_raw_data():
+    examples = []
+    lines = io.open(PATH, 'r', encoding='utf-8').readlines()
+    for i in lines:
+        s1 = i.split("\t")[0].lower()
+        s2 = i.split("\t")[1].lower()
+        examples.append([s1, s2])
+    return examples
 
 
 def set_search_optional(query_term,field,phrase_match):
@@ -20,8 +30,8 @@ def set_search_optional(query_term,field,phrase_match):
     if phrase_match:
         es_search_options["query"]["term"]={field:query_term}
     else:
-        es_search_options["query"]["match"]={field:{"query":query_term, "minimum_should_match": "75%"}}
-        es_search_options["query"]["bool"]={"must":{"match":{field:query_term}},"should":{ "match":{field:{"query":query_term, "minimum_should_match": "75%"}} }}
+        # es_search_options["query"]["match"]={field:{"query":query_term, "minimum_should_match": "75%"}}
+        es_search_options["query"]["bool"]={"should":{ "match":{field:{"query":query_term, "minimum_should_match": "80%"}} }}
     return es_search_options
 
 
@@ -65,11 +75,32 @@ if __name__ == '__main__':
     import json
     import sys
     es_client = Elasticsearch('http://192.168.124.87:9200/')
-    query = r"that's his dead son 's birthday"
-    final_results = search(es_client = es_client, query_term= query, field = 'content',phrase_match = False,num = 10)
-    for i in final_results:
-        print(i)
-    print(len(final_results))
+    sentences = get_para_5m_raw_data()
+    sentence_pairs = []
+    unpaired_sentences = []
+    flag = False
+    for i, sentence in enumerate(sentences):
+        origin, para = sentences
+        final_results = search(es_client = es_client, query_term= origin, field = 'content',phrase_match = False,num = 10)
+        if len(final_results) > 0:
+            for i in final_results:
+                if i['content'] != origin and i['content'] != para:
+                    sentence_pairs.append({'orig':origin,'pos':para, 'neg':i['content']})
+                    flag = True
+                    break
+        if not flag:
+            unpaired_sentences.append({'orig':origin,'pos':para})
+        if i > 10:
+            break
+            
+
     # with open('%s.json'% sys.argv[1], 'w') as f:
     #     f.write(json.dumps(final_results,ensure_ascii=False))
+    with open(sentence_pairs_path,'w') as f:
+        json_result = json.dumps(sentence_pairs, indent=2)
+        f.write(json_result)
 
+    with open(unpaired_sentences_path,'w') as f:
+        json_result = json.dumps(unpaired_sentences, indent=2)
+        f.write(json_result)
+        
