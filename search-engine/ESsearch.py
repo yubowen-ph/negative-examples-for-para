@@ -21,6 +21,7 @@ def set_search_optional(query_term,field,phrase_match):
         es_search_options["query"]["term"]={field:query_term}
     else:
         es_search_options["query"]["match"]={field:{"query":query_term, "minimum_should_match": "75%"}}
+        es_search_options["query"]["bool"]={"must":{"match":{field:query_term}}
     return es_search_options
 
 
