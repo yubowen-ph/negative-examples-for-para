@@ -20,7 +20,7 @@ def set_search_optional(query_term,field,phrase_match):
     if phrase_match:
         es_search_options["query"]["term"]={field:query_term}
     else:
-        es_search_options["query"]["match"]={field:query_term}
+        es_search_options["query"]["match"]={field:{"query":query_term, "minimum_should_match": "75%"}}
     return es_search_options
 
 
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     import json
     import sys
     es_client = Elasticsearch('http://192.168.124.87:9200/')
-    query = "that's his dead son 's birthday"
+    query = r"that's his dead son 's birthday"
     final_results = search(es_client = es_client, query_term= query, field = 'content',phrase_match = False,num = 10)
     for i in final_results:
         print(i)
