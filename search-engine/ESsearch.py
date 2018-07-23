@@ -1,5 +1,8 @@
 from elasticsearch import helpers
-
+import pickle
+import json
+import io
+import time
 PATH = '/home/yubowen/experiments/neg-para/search-engine/para-nmt-5m-processed.txt'
 sentence_pairs_path = 'sentence_pairs.json'
 
@@ -79,6 +82,7 @@ if __name__ == '__main__':
     sentence_pairs = []
     unpaired_sentences = []
     flag = False
+    start_time = time()
     for i, sentence in enumerate(sentences):
         origin, para = sentences
         final_results = search(es_client = es_client, query_term= origin, field = 'content',phrase_match = False,num = 10)
@@ -91,7 +95,14 @@ if __name__ == '__main__':
         if not flag:
             unpaired_sentences.append({'orig':origin,'pos':para})
         if i > 10:
+            print ('has searched',i,'sentences')
+            current_time = time()
+            print((current_time-start_time)/i,'s per search')
             break
+        if (i%1000==0):
+            print ('has searched',i,'sentences')
+            current_time = time()
+            print((current_time-start_time)/i,'s per search')
             
 
     # with open('%s.json'% sys.argv[1], 'w') as f:
