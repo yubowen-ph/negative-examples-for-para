@@ -82,7 +82,7 @@ if __name__ == '__main__':
     sentence_pairs = []
     unpaired_sentences = []
     flag = False
-    start_time = time()
+    start_time = time.time()
     for i, sentence in enumerate(sentences):
         origin, para = sentences
         final_results = search(es_client = es_client, query_term= origin, field = 'content',phrase_match = False,num = 10)
@@ -101,7 +101,7 @@ if __name__ == '__main__':
             break
         if (i%1000==0):
             print ('has searched',i,'sentences')
-            current_time = time()
+            current_time = time.time()
             print((current_time-start_time)/i,'s per search')
             
 
