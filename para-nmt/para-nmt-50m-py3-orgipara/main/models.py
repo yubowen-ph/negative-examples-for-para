@@ -56,10 +56,15 @@ class models(object):
     def get_pairs(self, batch, params):
         g1 = []
         g2 = []
+        g1_s = []
+        g2_s = []
 
         for i in batch:
             g1.append(i[0].embeddings)
             g2.append(i[1].embeddings)
+            g1_s.append(i[0].phrase)
+            g2_s.append(i[1].phrase)
+
 
         g1_ = [g1[i:i + params.batchsize] for i in range(0, len(g1), params.batchsize)]
         g2_ = [g2[i:i + params.batchsize] for i in range(0, len(g2), params.batchsize)]
@@ -84,16 +89,20 @@ class models(object):
         pairs = utils.get_pairs_fast(batch, params.samplingtype)
         p1 = []
         p2 = []
+        p1_s = []
+        p2_s = []
         for i in pairs:
             p1.append(i[0].embeddings)
             p2.append(i[1].embeddings)
+            p1_s.append(i[0].phrase)
+            p2_s.append(i[1].phrase)
 
         p1x, p1mask = self.prepare_data(p1)
         p2x, p2mask = self.prepare_data(p2)
 
         g1x, g1mask = self.prepare_data(g1)
         g2x, g2mask = self.prepare_data(g2)
-        return (g1x, g1mask, g2x, g2mask, p1x, p1mask, p2x, p2mask)
+        return (g1x, g1mask, g2x, g2mask, p1x, p1mask, p2x, p2mask),(g1_s,g2_s,p1_s,p2_s)
 
     def __init__(self, We_initial, params):
 
@@ -223,6 +232,7 @@ class models(object):
                 kf = self.get_minibatches_idx(len(data), params.batchsize, shuffle=True)
                 lkf = len(kf)
                 uidx = 0
+                sentence_samples = []
 
                 while(len(kf) > 0):
 
@@ -256,8 +266,10 @@ class models(object):
                             i[0].populate_embeddings_ngrams(words, 3, True)
                             i[1].populate_embeddings_ngrams(words, 3, True)
 
-                    (g1x, g1mask, g2x, g2mask, p1x, p1mask, p2x, p2mask) = self.get_pairs(megabatch, params)
-
+                    (g1x, g1mask, g2x, g2mask, p1x, p1mask, p2x, p2mask),(g1_s,g2_s,p1_s,p2_s) = self.get_pairs(megabatch, params)
+                    for i in range(len(g1_s)):
+                        sentence_samples.append({'orig':g1_s,'para':g2_s, 'neg_orign':p1_s, 'neg_para':p2_s})
+                    
                     cost = 0
                     for i in idxs:
                         cost += self.train_function(g1x[i], g2x[i], p1x[i], p2x[i], g1mask[i], g2mask[i], p1mask[i], p2mask[i])
@@ -290,6 +302,9 @@ class models(object):
                         self.save_params(params.outfile + '.pickle', words)
 
                 print('Epoch ', (eidx + 1), 'Cost ', cost)
+                with open("../data/generated_samples_%s_epoch_%d" % (params.model, eidx),'w') as f:
+                    json_result = json.dumps(sentence_samples, indent=2)
+                    f.write(json_result)
 
         except KeyboardInterrupt:
             print("Training interupted")
