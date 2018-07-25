@@ -57,7 +57,7 @@ print(" ".join(sys.argv))
 
 params = args
 
-data = utils.get_data(params.data)
+data = utils.get_data(params.data)[:1000]
 
 if params.combination_type:
     if params.loadmodel:

@@ -64,7 +64,6 @@ class models(object):
             g1.append(i[0].embeddings)
             g2.append(i[1].embeddings)
             g1_s.append(i[0].phrase)
-            print(i[0].phrase)
             g2_s.append(i[1].phrase)
 
 
@@ -271,7 +270,7 @@ class models(object):
 
                     (g1x, g1mask, g2x, g2mask, p1x, p1mask, p2x, p2mask),(g1_s,g2_s,p1_s,p2_s) = self.get_pairs(megabatch, params)
                     for i in range(len(g1_s)):
-                        sentence_samples.append({'orig':g1_s,'para':g2_s, 'neg_orign':p1_s, 'neg_para':p2_s})
+                        sentence_samples.append({'orig':g1_s[i],'para':g2_s[i], 'neg_orign':p1_s[i], 'neg_para':p2_s[i]})
                     
                     cost = 0
                     for i in idxs:
@@ -305,7 +304,7 @@ class models(object):
                         self.save_params(params.outfile + '.pickle', words)
 
                 print('Epoch ', (eidx + 1), 'Cost ', cost)
-                with open("../data/generated_samples_%s_epoch_%d" % (params.model, eidx),'w') as f:
+                with open("../data/generated_samples_%s_epoch_%d.json" % (params.model, eidx),'w') as f:
                     json_result = json.dumps(sentence_samples, indent=2)
                     f.write(json_result)
 
