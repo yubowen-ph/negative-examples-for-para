@@ -25,7 +25,7 @@ def get_data(f):
     for i in lines:
         #s1 = i.split("\t")[0].lower()
         #s2 = i.split("\t")[1].lower()
-        e = (example(i["orig"]),example(i["pos"]))
+        e = (example(i["orig"]),example(i["para"]),example(i["neg_orign"]),example(i["neg_para"]))
         examples.append(e)
     shuffle(examples)
     return examples

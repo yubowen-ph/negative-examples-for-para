@@ -56,43 +56,50 @@ class models(object):
     def get_pairs(self, batch, params):
         g1 = []
         g2 = []
+        p1 = []
+        p2 = []
+
 
         for i in batch:
             g1.append(i[0].embeddings)
             g2.append(i[1].embeddings)
+            p1.append(i[2].embeddings)
+            p2.append(i[3].embeddings)
 
-        g1_ = [g1[i:i + params.batchsize] for i in range(0, len(g1), params.batchsize)]
-        g2_ = [g2[i:i + params.batchsize] for i in range(0, len(g2), params.batchsize)]
-        embg1 = []
-        embg2 = []
-        for i in range(len(g1_)):
-            g1x, g1mask = self.prepare_data(g1_[i])
-            g2x, g2mask = self.prepare_data(g2_[i])
+        # g1_ = [g1[i:i + params.batchsize] for i in range(0, len(g1), params.batchsize)]
+        # g2_ = [g2[i:i + params.batchsize] for i in range(0, len(g2), params.batchsize)]
+        # embg1 = []
+        # embg2 = []
+        # for i in range(len(g1_)):
+        #     g1x, g1mask = self.prepare_data(g1_[i])
+        #     g2x, g2mask = self.prepare_data(g2_[i])
 
-            embg1_ = self.feedforward_function(g1x, g1mask)
-            embg2_ = self.feedforward_function(g2x, g2mask)
-            embg1.append(embg1_)
-            embg2.append(embg2_)
-        embg1 = np.vstack(embg1)
-        embg2 = np.vstack(embg2)
+        #     embg1_ = self.feedforward_function(g1x, g1mask)
+        #     embg2_ = self.feedforward_function(g2x, g2mask)
+        #     embg1.append(embg1_)
+        #     embg2.append(embg2_)
+        # embg1 = np.vstack(embg1)
+        # embg2 = np.vstack(embg2)
 
-        #update representations
-        for idx, i in enumerate(batch):
-            i[0].representation = embg1[idx, :]
-            i[1].representation = embg2[idx, :]
+        # #update representations
+        # for idx, i in enumerate(batch):
+        #     i[0].representation = embg1[idx, :]
+        #     i[1].representation = embg2[idx, :]
 
-        pairs = utils.get_pairs_fast(batch, params.samplingtype)
-        p1 = []
-        p2 = []
-        for i in pairs:
-            p1.append(i[0].embeddings)
-            p2.append(i[1].embeddings)
+        # pairs = utils.get_pairs_fast(batch, params.samplingtype)
+        # p1 = []
+        # p2 = []
+        # for i in pairs:
+        #     p1.append(i[0].embeddings)
+        #     p2.append(i[1].embeddings)
 
-        p1x, p1mask = self.prepare_data(p1)
-        p2x, p2mask = self.prepare_data(p2)
+        # p1x, p1mask = self.prepare_data(p1)
+        # p2x, p2mask = self.prepare_data(p2)
 
         g1x, g1mask = self.prepare_data(g1)
         g2x, g2mask = self.prepare_data(g2)
+        p1x, p1mask = self.prepare_data(p1)
+        p2x, p2mask = self.prepare_data(p2)
         return (g1x, g1mask, g2x, g2mask, p1x, p1mask, p2x, p2mask)
 
     def __init__(self, We_initial, params):
@@ -246,15 +253,23 @@ class models(object):
                                 if n > 0:
                                     i[0].populate_embeddings_scramble(words)
                                     i[1].populate_embeddings_scramble(words)
+                                    i[2].populate_embeddings_scramble(words)
+                                    i[3].populate_embeddings_scramble(words)
                                 else:
                                     i[0].populate_embeddings(words, True)
                                     i[1].populate_embeddings(words, True)
+                                    i[2].populate_embeddings(words, True)
+                                    i[3].populate_embeddings(words, True)
                             else:
                                 i[0].populate_embeddings(words, True)
                                 i[1].populate_embeddings(words, True)
+                                i[2].populate_embeddings(words, True)
+                                i[3].populate_embeddings(words, True)
                         else:
                             i[0].populate_embeddings_ngrams(words, 3, True)
                             i[1].populate_embeddings_ngrams(words, 3, True)
+                            i[2].populate_embeddings_ngrams(words, 3, True)
+                            i[3].populate_embeddings_ngrams(words, 3, True)
 
                     (g1x, g1mask, g2x, g2mask, p1x, p1mask, p2x, p2mask) = self.get_pairs(megabatch, params)
 
