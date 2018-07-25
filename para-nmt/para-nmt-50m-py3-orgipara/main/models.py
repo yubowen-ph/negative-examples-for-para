@@ -4,6 +4,7 @@ import lasagne
 import numpy as np
 import theano
 import utils
+import json
 from theano import config
 from theano import tensor as T
 from evaluate import evaluate_all
@@ -63,6 +64,7 @@ class models(object):
             g1.append(i[0].embeddings)
             g2.append(i[1].embeddings)
             g1_s.append(i[0].phrase)
+            print(i[0].phrase)
             g2_s.append(i[1].phrase)
 
 
@@ -94,6 +96,7 @@ class models(object):
         for i in pairs:
             p1.append(i[0].embeddings)
             p2.append(i[1].embeddings)
+
             p1_s.append(i[0].phrase)
             p2_s.append(i[1].phrase)
 
