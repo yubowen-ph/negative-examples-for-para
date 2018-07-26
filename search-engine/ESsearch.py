@@ -84,7 +84,7 @@ if __name__ == '__main__':
     # flag = False
     start_time = time.time()
     for i, sentence in enumerate(sentences):
-        origin, para = sentences
+        origin, para = sentence
         final_results = search(es_client = es_client, query_term= origin, field = 'content',phrase_match = False,num = 100)
         if len(final_results) > 0:
             results = []
