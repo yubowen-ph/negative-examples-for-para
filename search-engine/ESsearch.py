@@ -83,7 +83,7 @@ if __name__ == '__main__':
     unpaired_sentences = []
     # flag = False
     start_time = time.time()
-    for i, sentence in enumerate(sentences):
+    for ind, sentence in enumerate(sentences):
         origin, para = sentence
         final_results = search(es_client = es_client, query_term= origin, field = 'content',phrase_match = False,num = 100)
         if len(final_results) > 0:
@@ -96,15 +96,15 @@ if __name__ == '__main__':
                     # break
         # if not flag:
         #     unpaired_sentences.append({'orig':origin,'pos':para})
-        if i > 10:
-            print ('has searched',i,'sentences')
-            current_time = time()
-            print((current_time-start_time)/i,'s per search')
-            break
-        if (i%1000==0):
-            print ('has searched',i,'sentences')
+        # if i > 10:
+        #     print ('has searched',i,'sentences')
+        #     current_time = time()
+        #     print((current_time-start_time)/i,'s per search')
+        #     break
+        if (ind%1000==0):
+            print ('has searched',ind,'sentences')
             current_time = time.time()
-            print((current_time-start_time)/i,'s per search')
+            print((current_time-start_time)/ind,'s per search')
             
 
     # with open('%s.json'% sys.argv[1], 'w') as f:
