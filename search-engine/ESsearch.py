@@ -101,7 +101,7 @@ if __name__ == '__main__':
         #     current_time = time()
         #     print((current_time-start_time)/i,'s per search')
         #     break
-        if (ind%1000==0):
+        if (ind%1000==1):
             print ('has searched',ind,'sentences')
             current_time = time.time()
             print((current_time-start_time)/ind,'s per search')
