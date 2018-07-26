@@ -4,9 +4,9 @@ import json
 import io
 import time
 PATH = '/home/yubowen/experiments/neg-para/search-engine/para-nmt-5m-processed.txt'
-sentence_pairs_path = 'sentence_pairs.json'
+sentence_pairs_path = 'sentence_pairs_0_30k_neg_100.json'
 
-unpaired_sentences_path = 'unpaired_sentences.json'
+# unpaired_sentences_path = 'unpaired_sentences.json'
 
 
 
@@ -81,19 +81,21 @@ if __name__ == '__main__':
     sentences = get_para_5m_raw_data()
     sentence_pairs = []
     unpaired_sentences = []
-    flag = False
+    # flag = False
     start_time = time.time()
     for i, sentence in enumerate(sentences):
         origin, para = sentences
-        final_results = search(es_client = es_client, query_term= origin, field = 'content',phrase_match = False,num = 10)
+        final_results = search(es_client = es_client, query_term= origin, field = 'content',phrase_match = False,num = 100)
         if len(final_results) > 0:
+            results = []
             for i in final_results:
                 if i['content'] != origin and i['content'] != para:
-                    sentence_pairs.append({'orig':origin,'pos':para, 'neg':i['content']})
-                    flag = True
-                    break
-        if not flag:
-            unpaired_sentences.append({'orig':origin,'pos':para})
+                    results.append(i['content'])
+            sentence_pairs.append({'orig':origin,'pos':para, 'neg':results})
+                    # flag = True
+                    # break
+        # if not flag:
+        #     unpaired_sentences.append({'orig':origin,'pos':para})
         if i > 10:
             print ('has searched',i,'sentences')
             current_time = time()
@@ -111,7 +113,7 @@ if __name__ == '__main__':
         json_result = json.dumps(sentence_pairs, indent=2)
         f.write(json_result)
 
-    with open(unpaired_sentences_path,'w') as f:
-        json_result = json.dumps(unpaired_sentences, indent=2)
-        f.write(json_result)
+    # with open(unpaired_sentences_path,'w') as f:
+    #     json_result = json.dumps(unpaired_sentences, indent=2)
+    #     f.write(json_result)
         
