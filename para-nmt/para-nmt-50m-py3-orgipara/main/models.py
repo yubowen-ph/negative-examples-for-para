@@ -274,7 +274,9 @@ class models(object):
                     
                     cost = 0
                     for i in idxs:
-                        cost += self.train_function(g1x[i], g2x[i], p1x[i], p2x[i], g1mask[i], g2mask[i], p1mask[i], p2mask[i])
+                        cc = self.train_function(g1x[i], g2x[i], p1x[i], p2x[i], g1mask[i], g2mask[i], p1mask[i], p2mask[i])
+                        cost += cc
+                        sentence_samples.append({'orig':g1_s[i],'para':g2_s[i], 'neg_orign':p1_s[i], 'neg_para':p2_s[i], 'cost':cc})
 
                     cost = cost / len(idxs)
 
@@ -304,7 +306,7 @@ class models(object):
                         self.save_params(params.outfile + '.pickle', words)
 
                 print('Epoch ', (eidx + 1), 'Cost ', cost)
-                with open("../data/generated_samples_%s_epoch_%d.json" % (params.model, eidx),'w') as f:
+                with open("../data/sampled_samples/%s_epoch_%d.json" % (params.model, eidx),'w') as f:
                     json_result = json.dumps(sentence_samples, indent=2)
                     f.write(json_result)
 

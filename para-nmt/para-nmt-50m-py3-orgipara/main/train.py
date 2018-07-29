@@ -61,7 +61,7 @@ data = utils.get_data(params.data)[:1000]
 
 if params.combination_type:
     if params.loadmodel:
-        saved_params = pickle.load(open(params.loadmodel, 'rb'),encoding='latin1')
+        saved_params = pickle.load(open(params.loadmodel, 'rb'))
         if params.combination_type == "ngram-word":
             words = saved_params.pop(-1)
             words_3grams = words[0]
@@ -105,7 +105,7 @@ if params.combination_type:
     model.train(data, words_3grams, words_words, params)
 else:
     if params.loadmodel:
-        saved_params = pickle.load(open(params.loadmodel, 'rb'), encoding='latin1')
+        saved_params = pickle.load(open(params.loadmodel, 'rb'))
         words = saved_params.pop(-1)
         model = models(saved_params[0], params)
         lasagne.layers.set_all_param_values(model.final_layer, saved_params)
