@@ -53,8 +53,30 @@ def evaluate_all(model, words, params):
     prefix = "../data/"
     parr = []; sarr = []
 
-    farr = ["annotated-ppdb-dev",
-            "annotated-ppdb-test"]
+    farr = ["annotated-ppdb-test",
+            "STS/STS2012-test/STS2012.MSRpar.txt", 
+            "STS/STS2012-test/STS2012.MSRvid.txt",
+            "STS/STS2012-test/STS2012.SMTeuroparl.txt",
+            "STS/STS2012-test/STS2012.surprise.OnWN.txt",
+            "STS/STS2012-test/STS2012.surprise.SMTnews.txt",
+            
+            "STS/STS2013-test/STS2013.FNWN.txt",
+            "STS/STS2013-test/STS2013.headlines.txt",
+            "STS/STS2013-test/STS2013.OnWN.txt",
+            
+            "STS/STS2014-test/STS2014.deft-forum.txt",
+            "STS/STS2014-test/STS2014.deft-news.txt",
+            "STS/STS2014-test/STS2014.headlines.txt",
+            "STS/STS2014-test/STS2014.images.txt",
+            "STS/STS2014-test/STS2014.OnWN.txt",
+            "STS/STS2014-test/STS2014.tweet-news.txt",
+            
+            "STS/STS2015-test/STS2015.answers-forums.txt",
+            "STS/STS2015-test/STS2015.answers-students.txt",
+            "STS/STS2015-test/STS2015.belief.txt",
+            "STS/STS2015-test/STS2015.headlines.text",
+            "STS/STS2015-test/STS2015.images.txt",
+            ]
 
     for i in farr:
         p,s = get_correlation(model, words, prefix + i, params)
@@ -64,5 +86,26 @@ def evaluate_all(model, words, params):
     for i,j,k in zip(parr,sarr,farr):
         s += str(i)+" "+str(j)+" "+k+" | "
 
-    print(s)
-    return parr[0]
+    parr = np.asarray(parr)
+    ppdb = parr[0]
+    STS_2012 = np.mean(parr[1:6])
+    STS_2013 = np.mean(parr[6:9])
+    STS_2014 = np.mean(parr[9:15])
+    STS_2015 = np.mean(parr[15:20])
+    STS_12to15 = np.mean(parr[1:20])
+    # STS_2016 = np.mean(parr[-5:])
+    
+    s += "STS_2012 : " + str(STS_2012) + "\n"
+    s += "STS_2013 : " + str(STS_2013) + "\n"
+    s += "STS_2014 : " + str(STS_2014) + "\n"
+    s += "STS_2015 : " + str(STS_2015) + "\n"
+    s += "STS_12to15 : " + str(np.mean(parr[1:20])) + "\n"
+    # s += "STS_2016 : " + str(STS_2016) + "\n"
+    s += "ppdb : " + str(ppdb) + "\n"
+    
+    '''
+    with open("results.txt", "a") as f:
+        f.write(s)
+    '''
+    print s
+    return STS_12to15
