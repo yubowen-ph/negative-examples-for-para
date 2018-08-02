@@ -19,6 +19,22 @@ def lookup_idx(words, w):
     else:
         return words['UUUNKKK']
 
+def get_semi_hard(arr):
+    result = []
+    arr = np.argsort(arr, axis=1)
+    for i in range(np.shape(arr)[1]):
+        if i % 2 == 0:
+            tag = i+1
+        else:
+            tag = i-1
+        coloum = arr[:,i]
+        for j in range(np.shape(arr)[0]):
+            if coloum[j] == tag:
+                result.append(j+1)
+                break
+    return result
+
+
 def get_data(f):
     lines = io.open(f, 'r', encoding='utf-8').readlines()
     examples = []
@@ -124,12 +140,13 @@ def get_pairs_fast(d, type):
 
     for i in range(len(arr)):
         arr[i,i]=1
-        if i % 2 == 0:
-            arr[i,i+1] = 1
-        else:
-            arr[i,i-1] = 1
+        # if i % 2 == 0:
+        #     arr[i,i+1] = 1
+        # else:
+        #     arr[i,i-1] = 1
 
-    arr = np.argmin(arr,axis=1)
+    # arr = np.argmin(arr,axis=1)
+    arr = get_semi_hard(arr)
     for i in range(len(d)):
         (t1,t2) = d[i]
         p1 = None
